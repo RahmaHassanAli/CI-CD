@@ -7,7 +7,7 @@ data:
   context: /camundaworkflowapi
   version: 1.0.0
   provider: admin
-  lifeCycleStatus: CREATED
+  lifeCycleStatus: PUBLISHED
   responseCachingEnabled: false
   cacheTimeout: 300
   hasThumbnail: true
