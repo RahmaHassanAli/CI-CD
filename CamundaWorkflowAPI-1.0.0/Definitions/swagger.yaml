@@ -3,17 +3,71 @@ info:
   title: CamundaWorkflowAPI
   description: API documentation for Camunda workflow services
   contact:
-    name: Ahmad Aldeeb
-    email: rahma.hassan@qeema.net
+    name: Integration Team
+    email: moaaz.taha@qeema.net
   version: 1.0.0
 servers:
  -
-  url: http://localhost:8888
+  url: https://devcamunda-upsource.apps.qeema.io
   description: Generated server url
 security:
  -
   default: []
 paths:
+  /api/v1/process-instances/{processInstanceId}/suspended:
+    put:
+      tags:
+       - Process Instances
+      summary: Activate or suspend a running process instance
+      operationId: activateSuspendProcessInstance
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: boolean
+        required: true
+      responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+        default:
+          description: default response
+      security:
+       -
+        default:
+         - camunda:access
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
   /api/v1/tasks/{taskId}/delegate:
     post:
       tags:
@@ -22,9 +76,9 @@ paths:
       operationId: delegateTask
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -46,11 +100,22 @@ paths:
         schema:
           type: string
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -65,9 +130,9 @@ paths:
       operationId: completeTask
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -88,54 +153,22 @@ paths:
               additionalProperties: {}
         required: true
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
       security:
        -
-        default: []
-      x-auth-type: Application & Application User
-      x-throttling-tier: Unlimited
-      x-wso2-application-security:
-        security-types:
-         - oauth2
-        optional: false
-  /api/v1/tasks/{taskId}/bypass:
-    post:
-      tags:
-       - Tasks
-      summary: Bypass a task
-      operationId: bypassTask
-      parameters:
-       -
-        name: correlationId
-        in: header
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-       -
-        name: taskId
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-       -
-        name: taskDefinitionKey
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-      responses:
         default:
-          description: default response
-      security:
-       -
-        default: []
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -150,9 +183,9 @@ paths:
       operationId: getProcessInstances
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -174,6 +207,16 @@ paths:
         schema:
           type: string
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
           content:
@@ -182,7 +225,8 @@ paths:
                 $ref: "#/components/schemas/HistoricProcessInstanceDto"
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -196,9 +240,9 @@ paths:
       operationId: startProcessInstance
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -219,6 +263,16 @@ paths:
               additionalProperties: {}
         required: true
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
           content:
@@ -227,7 +281,62 @@ paths:
                 $ref: "#/components/schemas/ProcessInstanceDto"
       security:
        -
-        default: []
+        default:
+         - camunda:access
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+  /api/v1/process-instances/{processInstanceId}/move:
+    post:
+      tags:
+       - Process Instances
+      summary: Move a running process instance from one activity to another
+      operationId: moveProcessInstance
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: toActivityId
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+        default:
+          description: default response
+      security:
+       -
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -242,9 +351,9 @@ paths:
       operationId: getAssigneeLists
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -258,6 +367,16 @@ paths:
         schema:
           type: string
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
           content:
@@ -266,7 +385,8 @@ paths:
                 $ref: "#/components/schemas/AssigneeListDto"
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -280,9 +400,9 @@ paths:
       operationId: addAssignee
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -294,11 +414,22 @@ paths:
               $ref: "#/components/schemas/AssignmentRequestDto"
         required: true
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -312,9 +443,9 @@ paths:
       operationId: removeAssignee
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -326,11 +457,22 @@ paths:
               $ref: "#/components/schemas/AssignmentRequestDto"
         required: true
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -345,9 +487,9 @@ paths:
       operationId: getTasks
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -361,6 +503,16 @@ paths:
         schema:
           $ref: "#/components/schemas/TaskQueryParams"
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
           content:
@@ -369,7 +521,8 @@ paths:
                 $ref: "#/components/schemas/TaskDto"
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -384,9 +537,9 @@ paths:
       operationId: getProcessInstanceDetails
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -400,6 +553,16 @@ paths:
         schema:
           type: string
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
           content:
@@ -408,7 +571,8 @@ paths:
                 $ref: "#/components/schemas/ProcessInstanceDetailsDto"
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -422,9 +586,9 @@ paths:
       operationId: cancelProcessInstance
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -438,11 +602,22 @@ paths:
         schema:
           type: string
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -457,9 +632,9 @@ paths:
       operationId: getStartingProcessInput
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -481,7 +656,8 @@ paths:
                 $ref: "#/components/schemas/InputDto"
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -496,9 +672,9 @@ paths:
       operationId: getUserTaskInput
       parameters:
        -
-        name: correlationId
+        name: X-Correlation-ID
         in: header
-        required: true
+        required: false
         style: simple
         explode: false
         schema:
@@ -520,6 +696,16 @@ paths:
         schema:
           type: string
       responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
         default:
           description: default response
           content:
@@ -528,7 +714,8 @@ paths:
                 $ref: "#/components/schemas/InputDto"
       security:
        -
-        default: []
+        default:
+         - camunda:access
       x-auth-type: Application & Application User
       x-throttling-tier: Unlimited
       x-wso2-application-security:
@@ -730,7 +917,7 @@ components:
           type: string
         restartedProcessInstanceId:
           type: string
-    ActivityInstanceDto:
+    HistoricActivityInstanceDto:
       type: object
       description: "Represents a single activity instance within a process, including metadata such as start/end times, assignee, duration, tenant and linking IDs."
       properties:
@@ -784,10 +971,10 @@ components:
       type: object
       description: Aggregates detailed information for a process instance including activity instances and process variables.
       properties:
-        activityInstances:
+        historicActivityInstances:
           type: array
           items:
-            $ref: "#/components/schemas/ActivityInstanceDto"
+            $ref: "#/components/schemas/HistoricActivityInstanceDto"
         processVariables:
           type: array
           items:
@@ -869,13 +1056,91 @@ components:
           type: string
         assigneeListKey:
           type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: WSO2 error code
+        message:
+          type: string
+          description: Error message
+        description:
+          type: string
+          description: Detailed error description
+      required:
+       - code
+       - description
+       - message
+  responses:
+    Unauthorized:
+      description: Unauthorized - Authentication credentials are missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            invalidCredentials:
+              $ref: "#/components/examples/InvalidCredentials"
+    Forbidden:
+      description: Forbidden - The client does not have access rights to the content
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            insufficientScope:
+              $ref: "#/components/examples/InsufficientScope"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ServiceUnavailable:
+      description: Service Unavailable - The server is unable to handle the request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          examples:
+            apiBlocked:
+              $ref: "#/components/examples/ApiBlocked"
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  examples:
+    InvalidCredentials:
+      summary: Invalid Credentials
+      value:
+        code: "900901"
+        message: Invalid Credentials
+        description: Invalid Credentials. Make sure you have provided the correct security credentials
+    InsufficientScope:
+      summary: Scope validation failed
+      value:
+        code: "900910"
+        message: The access token does not allow you to access the requested resource
+        description: "Access failure for API: /api/1.0.0, version: 1.0.0 status: (900910) - The access token does not allow you to access the requested resource"
+    ApiBlocked:
+      summary: API blocked
+      value:
+        code: "700700"
+        message: API blocked
+        description: This API has been blocked temporarily. Please try again later or contact the system administrators.
   securitySchemes:
     default:
       type: oauth2
       flows:
         implicit:
           authorizationUrl: https://test.com
-          scopes: {}
+          scopes:
+            camunda:access: access scope for camunda APIs
+          x-scopes-bindings:
+            camunda:access: camunda-user
 x-wso2-api-key-header: ApiKey
 x-wso2-auth-header: Authorization
 x-wso2-cors:
@@ -899,11 +1164,11 @@ x-wso2-cors:
    - OPTIONS
 x-wso2-production-endpoints:
   urls:
-   - http://localhost:8888
+   - https://devcamunda-upsource.apps.qeema.io
   type: http
 x-wso2-sandbox-endpoints:
   urls:
-   - http://localhost:8888
+   - https://devcamunda-upsource.apps.qeema.io
   type: http
 x-wso2-basePath: /camundaworkflowapi/1.0.0
 x-wso2-transports:

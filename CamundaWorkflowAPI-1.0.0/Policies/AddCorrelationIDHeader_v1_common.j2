@@ -1,0 +1,8 @@
+<property name="CorrelationID" expression="get-property('transport','X-Correlation-ID')"/>
+
+<filter xpath="boolean(get-property('CorrelationID'))">
+    <then/>
+    <else>
+        <header name="X-Correlation-ID" expression="get-property('correlation_id')" scope="transport"/>
+    </else>
+</filter>
