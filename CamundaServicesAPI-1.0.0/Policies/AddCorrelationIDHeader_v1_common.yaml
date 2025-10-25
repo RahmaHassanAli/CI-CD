@@ -1,0 +1,17 @@
+type: operation_policy_specification
+version: v4.5.0
+data:
+  category: Mediation
+  name: AddCorrelationIDHeader
+  version: v1
+  displayName: Add Correlation ID Header
+  description: This policy allows you to add correlation id header to the request
+  applicableFlows:
+   - request
+   - response
+   - fault
+  supportedGateways:
+   - Synapse
+  supportedApiTypes:
+   - HTTP
+  policyAttributes: []
