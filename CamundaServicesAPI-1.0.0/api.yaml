@@ -81,8 +81,8 @@ data:
     signingAlgorithm: SHA1
     signatureHeader: x-hub-signature
   createdTime: "1761408186225"
-  lastUpdatedTimestamp: "1761434125370"
-  lastUpdatedTime: 2025-10-26 02:15:25.37
+  lastUpdatedTimestamp: "1761443817113"
+  lastUpdatedTime: 2025-10-26 04:56:57.113
   endpointConfig:
     endpoint_type: http
     sandbox_endpoints:

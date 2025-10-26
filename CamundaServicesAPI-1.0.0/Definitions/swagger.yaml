@@ -1301,6 +1301,13 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
+          examples:
+            unclassifiedAuthFailure:
+              summary: Unclassified authentication failure
+              value:
+                code: "900900"
+                message: Unclassified authentication failure
+                description: ' Backend service for key validation is not accessible when trying to invoke an API.'
     ServiceUnavailable:
       description: Service Unavailable - The server is unable to handle the request
       content:
