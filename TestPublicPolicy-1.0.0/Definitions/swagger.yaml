@@ -1,0 +1,1041 @@
+openapi: 3.1.0
+info:
+  title: TestPublicPolicy
+  description: API documentation for Camunda workflow services
+  contact:
+    name: Ahmad Aldeeb
+    email: ahmad.aldeeb@qeema.net
+  version: 1.0.0
+servers:
+ -
+  url: http://localhost:8888
+  description: Generated server url
+security:
+ -
+  default: []
+paths:
+  /api/v1/tasks/{taskId}:
+    put:
+      tags:
+       - Tasks
+      summary: Update a task
+      operationId: updateTask
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: taskId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskDto"
+            example:
+              name: Review Marketing Campaign
+              description: Review the Q4 campaign content and provide final approval before publishing.
+              assignee: ahmeddeeb11111@gmail.com
+              due: 2025-10-31T22:30:00.000+0300
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseVoid"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+  /api/v1/process-instances/{processInstanceId}/suspended:
+    put:
+      tags:
+       - Process Instances
+      summary: Activate or suspend a running process instance
+      operationId: activateSuspendProcessInstance
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivateSuspendRequestDto"
+            example:
+              suspended: true
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseVoid"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+  /api/v1/definitions/processes/{processKey}/tasks/{taskKey}:
+    get:
+      tags:
+       - Definitions
+      summary: Get a task definition
+      operationId: getTaskDefinition
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processKey
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: taskKey
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseTaskDefinitionDto"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+    put:
+      tags:
+       - Definitions
+      summary: Update a task definition
+      operationId: updateTaskDefinition
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processKey
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: taskKey
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskDefinitionDto"
+            example:
+              slaDays: 3
+              inputs:
+               -
+                label: Approve/Reject Request
+                description: Decision on the request
+                type: Radio button
+                options:
+                 - Approve
+                 - Reject
+               -
+                label: Comment
+                description: Additional remarks or feedback
+                type: Multi-line text
+                options:
+                 - Free text
+               -
+                label: Attachments
+                description: Supporting files
+                type: File upload
+                options:
+                 - PDF
+                 - JPG
+                 - PNG
+                 - DOCX
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseTaskDefinitionDto"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+  /api/v1/tasks/{taskId}/complete:
+    post:
+      tags:
+       - Tasks
+      summary: Complete a task
+      operationId: completeTask
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: taskId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteTaskRequestDto"
+            example:
+              variables:
+                lineManagerResponse:
+                  value: "yes"
+                comment:
+                  value: Good Request! 🤝
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseVoid"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+  /api/v1/process-instances:
+    get:
+      tags:
+       - Process Instances
+      summary: Get process instances
+      operationId: getProcessInstances
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processDefinitionKey
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseListHistoricProcessInstanceDto"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+    post:
+      tags:
+       - Process Instances
+      summary: Start a new process instance
+      operationId: startProcessInstance
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processDefinitionKey
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StartProcessInstanceRequestDto"
+            example:
+              businessKey: req-1
+              variables:
+                requesterEmail:
+                  value: ahmeddeeb22222@gmail.com
+                  type: String
+                type:
+                  value: "[\"Internal\", \"Public\"]"
+                  type: Object
+                  valueInfo:
+                    objectTypeName: java.util.ArrayList
+                    serializationDataFormat: application/json
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseProcessInstanceDto"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+  /api/v1/tasks:
+    get:
+      tags:
+       - Tasks
+      summary: Get tasks
+      operationId: getTasks
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processDefinitionKey
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: processInstanceId
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: assignee
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: dueDate
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: dueAfter
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: dueBefore
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: createdOn
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: createdAfter
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: createdBefore
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: sortBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: sortOrder
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: firstResult
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+       -
+        name: maxResults
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseListTaskDto"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+  /api/v1/process-instances/{processInstanceId}:
+    get:
+      tags:
+       - Process Instances
+      summary: Get a process instance details (steps and variables)
+      operationId: getProcessInstanceDetails
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseProcessInstanceDetailsDto"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+    delete:
+      tags:
+       - Process Instances
+      summary: Cancel a running process instance
+      operationId: deleteProcessInstance
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteProcessInstanceRequestDto"
+            example:
+              deleteReason: This is an invalid request...
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseVoid"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+  /api/v1/definitions/processes/{processKey}:
+    get:
+      tags:
+       - Definitions
+      summary: Get a process definition
+      operationId: getProcessDefinition
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: processKey
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseProcessDefinitionDto"
+      security:
+       -
+        default: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
+components:
+  schemas:
+    CamundaFormRef:
+      type: object
+      properties:
+        key:
+          type: string
+        binding:
+          type: string
+        version:
+          type: integer
+          format: int32
+    TaskDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        assignee:
+          type: string
+        created:
+          type: string
+        due:
+          type: string
+        followUp:
+          type: string
+        lastUpdated:
+          type: string
+        delegationState:
+          type: string
+        description:
+          type: string
+        executionId:
+          type: string
+        owner:
+          type: string
+        parentTaskId:
+          type: string
+        priority:
+          type: integer
+          format: int32
+        processDefinitionId:
+          type: string
+        processInstanceId:
+          type: string
+        taskDefinitionKey:
+          type: string
+        caseExecutionId:
+          type: string
+        caseInstanceId:
+          type: string
+        caseDefinitionId:
+          type: string
+        suspended:
+          type: boolean
+        formKey:
+          type: string
+        camundaFormRef:
+          $ref: "#/components/schemas/CamundaFormRef"
+        tenantId:
+          type: string
+        taskState:
+          type: string
+    ApiResponseVoid:
+      type: object
+      properties:
+        header:
+          $ref: "#/components/schemas/Header"
+        data: {}
+    Header:
+      type: object
+      properties:
+        X-Correlation-ID:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+    ActivateSuspendRequestDto:
+      type: object
+      properties:
+        suspended:
+          type: boolean
+    InputDto:
+      type: object
+      properties:
+        label:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+      required:
+       - description
+       - label
+       - options
+       - type
+    TaskDefinitionDto:
+      type: object
+      properties:
+        slaDays:
+          type: integer
+          format: int32
+        inputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/InputDto"
+    ApiResponseTaskDefinitionDto:
+      type: object
+      properties:
+        header:
+          $ref: "#/components/schemas/Header"
+        data:
+          $ref: "#/components/schemas/TaskDefinitionDto"
+    CompleteTaskRequestDto:
+      type: object
+      properties:
+        variables:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ProcessVariableDto"
+    ProcessVariableDto:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        value: {}
+        valueInfo:
+          type: object
+          additionalProperties: {}
+      required:
+       - value
+    StartProcessInstanceRequestDto:
+      type: object
+      properties:
+        variables:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ProcessVariableDto"
+        businessKey:
+          type: string
+    ApiResponseProcessInstanceDto:
+      type: object
+      properties:
+        header:
+          $ref: "#/components/schemas/Header"
+        data:
+          $ref: "#/components/schemas/ProcessInstanceDto"
+    Link:
+      type: object
+      properties:
+        method:
+          type: string
+        href:
+          type: string
+        rel:
+          type: string
+    ProcessInstanceDto:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            $ref: "#/components/schemas/Link"
+        id:
+          type: string
+        definitionId:
+          type: string
+        businessKey:
+          type: string
+        caseInstanceId:
+          type: string
+        ended:
+          type: boolean
+        suspended:
+          type: boolean
+        tenantId:
+          type: string
+        definitionKey:
+          type: string
+    ApiResponseListTaskDto:
+      type: object
+      properties:
+        header:
+          $ref: "#/components/schemas/Header"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskDto"
+    ApiResponseListHistoricProcessInstanceDto:
+      type: object
+      properties:
+        header:
+          $ref: "#/components/schemas/Header"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/HistoricProcessInstanceDto"
+    HistoricProcessInstanceDto:
+      type: object
+      properties:
+        id:
+          type: string
+        businessKey:
+          type: string
+        processDefinitionId:
+          type: string
+        processDefinitionKey:
+          type: string
+        processDefinitionName:
+          type: string
+        processDefinitionVersion:
+          type: integer
+          format: int32
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        removalTime:
+          type: string
+          format: date-time
+        durationInMillis:
+          type: integer
+          format: int64
+        startUserId:
+          type: string
+        startActivityId:
+          type: string
+        deleteReason:
+          type: string
+        rootProcessInstanceId:
+          type: string
+        superProcessInstanceId:
+          type: string
+        superCaseInstanceId:
+          type: string
+        caseInstanceId:
+          type: string
+        tenantId:
+          type: string
+        state:
+          type: string
+        restartedProcessInstanceId:
+          type: string
+    ApiResponseProcessInstanceDetailsDto:
+      type: object
+      properties:
+        header:
+          $ref: "#/components/schemas/Header"
+        data:
+          $ref: "#/components/schemas/ProcessInstanceDetailsDto"
+    HistoricActivityInstanceDto:
+      type: object
+      properties:
+        id:
+          type: string
+        parentActivityInstanceId:
+          type: string
+        activityId:
+          type: string
+        activityName:
+          type: string
+        activityType:
+          type: string
+        processDefinitionKey:
+          type: string
+        processDefinitionId:
+          type: string
+        processInstanceId:
+          type: string
+        executionId:
+          type: string
+        taskId:
+          type: string
+        calledProcessInstanceId:
+          type: string
+        calledCaseInstanceId:
+          type: string
+        assignee:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        durationInMillis:
+          type: integer
+          format: int64
+        canceled:
+          type: boolean
+        completeScope:
+          type: boolean
+        tenantId:
+          type: string
+        removalTime:
+          type: string
+          format: date-time
+        rootProcessInstanceId:
+          type: string
+    ProcessInstanceDetailsDto:
+      type: object
+      properties:
+        historicActivityInstances:
+          type: array
+          items:
+            $ref: "#/components/schemas/HistoricActivityInstanceDto"
+        processVariables:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProcessVariableDto"
+    ApiResponseProcessDefinitionDto:
+      type: object
+      properties:
+        header:
+          $ref: "#/components/schemas/Header"
+        data:
+          $ref: "#/components/schemas/ProcessDefinitionDto"
+    ProcessDefinitionDto:
+      type: object
+      properties:
+        key:
+          type: string
+        tasks:
+          type: array
+          items:
+            type: string
+        inputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/InputDto"
+    DeleteProcessInstanceRequestDto:
+      type: object
+      properties:
+        deleteReason:
+          type: string
+  securitySchemes:
+    default:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://test.com
+          scopes: {}
+x-wso2-auth-header: Authorization
+x-wso2-api-key-header: ApiKey
+x-wso2-cors:
+  corsConfigurationEnabled: false
+  accessControlAllowOrigins:
+   - '*'
+  accessControlAllowCredentials: false
+  accessControlAllowHeaders:
+   - authorization
+   - Access-Control-Allow-Origin
+   - Content-Type
+   - SOAPAction
+   - apikey
+   - Internal-Key
+  accessControlAllowMethods:
+   - GET
+   - PUT
+   - POST
+   - DELETE
+   - PATCH
+   - OPTIONS
+x-wso2-production-endpoints:
+  urls:
+   - http://localhost:8888
+  type: http
+x-wso2-sandbox-endpoints:
+  urls:
+   - http://localhost:8888
+  type: http
+x-wso2-basePath: /testPublic/1.0.0
+x-wso2-transports:
+ - http
+ - https
+x-wso2-application-security:
+  security-types:
+   - oauth2
+  optional: false
+x-wso2-response-cache:
+  enabled: false
+  cacheTimeoutInSeconds: 300
