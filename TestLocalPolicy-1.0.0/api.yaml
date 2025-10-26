@@ -1,16 +1,16 @@
 type: api
 version: v4.5.0
 data:
-  id: 4add79ac-0687-4231-b03b-8af5b54fd37d
-  name: CamundaServicesAPI
+  id: 31b3e313-b197-4ed1-ab79-9fb7b12d8d6d
+  name: TestLocalPolicy
   description: API documentation for Camunda workflow services
-  context: /camundaservicesapi
+  context: /testLocal
   version: 1.0.0
   provider: admin
-  lifeCycleStatus: PUBLISHED
+  lifeCycleStatus: CREATED
   responseCachingEnabled: false
   cacheTimeout: 300
-  hasThumbnail: true
+  hasThumbnail: false
   isDefaultVersion: false
   isRevision: false
   revisionId: 0
@@ -37,25 +37,13 @@ data:
   visibleOrganizations:
    - none
   mediationPolicies: []
-  apiPolicies:
-    request:
-     -
-      policyName: AddCorrelationIDHeader
-      policyVersion: v1
-      policyType: api
-      policyId: 759316f5-a08e-4684-88bc-ccb6a614ca7c
-      parameters: {}
-    response: []
-    fault: []
   subscriptionAvailability: CURRENT_TENANT
   subscriptionAvailableTenants: []
   additionalProperties: []
   additionalPropertiesMap: {}
   accessControl: NONE
   accessControlRoles: []
-  businessInformation:
-    technicalOwner: 'Rahma Hassan '
-    technicalOwnerEmail: rahma.hassan@qeema.net
+  businessInformation: {}
   corsConfiguration:
     corsConfigurationEnabled: false
     accessControlAllowOrigins:
@@ -80,26 +68,19 @@ data:
     secret: ""
     signingAlgorithm: SHA1
     signatureHeader: x-hub-signature
-  createdTime: "1761408186225"
-  lastUpdatedTimestamp: "1761434125370"
-  lastUpdatedTime: 2025-10-26 02:15:25.37
+  createdTime: "1761441326051"
+  lastUpdatedTimestamp: "1761441373358"
+  lastUpdatedTime: 2025-10-26 04:16:13.358
   endpointConfig:
     endpoint_type: http
     sandbox_endpoints:
-      url: https://devcamunda-upsource.apps.qeema.io
+      url: http://localhost:8888
     production_endpoints:
-      url: https://devcamunda-upsource.apps.qeema.io
+      url: http://localhost:8888
   endpointImplementationType: ENDPOINT
   subtypeConfiguration:
     subtype: DEFAULT
-  scopes:
-   -
-    scope:
-      name: camunda:access
-      displayName: camunda:access
-      description: access scope for camunda APIs
-      bindings: []
-    shared: true
+  scopes: []
   operations:
    -
     id: ""
@@ -107,11 +88,16 @@ data:
     verb: PUT
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
-      request: []
+      request:
+       -
+        policyName: test
+        policyVersion: v1
+        policyType: api
+        policyId: f25f1465-85cc-4751-ac4c-5024b22e75ce
+        parameters: {}
       response: []
       fault: []
    -
@@ -120,8 +106,7 @@ data:
     verb: PUT
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -133,8 +118,7 @@ data:
     verb: GET
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -146,8 +130,7 @@ data:
     verb: PUT
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -159,8 +142,7 @@ data:
     verb: POST
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -172,8 +154,7 @@ data:
     verb: GET
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -185,8 +166,7 @@ data:
     verb: POST
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -198,8 +178,7 @@ data:
     verb: GET
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -211,8 +190,7 @@ data:
     verb: GET
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -224,8 +202,7 @@ data:
     verb: DELETE
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
@@ -237,8 +214,7 @@ data:
     verb: GET
     authType: Application & Application User
     throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
+    scopes: []
     usedProductIds: []
     operationPolicies:
       request: []
