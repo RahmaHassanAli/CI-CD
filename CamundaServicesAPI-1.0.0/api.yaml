@@ -1,7 +1,7 @@
 type: api
 version: v4.5.0
 data:
-  id: 4add79ac-0687-4231-b03b-8af5b54fd37d
+  id: 3d4e6308-dd8a-4781-acf0-054c526a7be8
   name: CamundaServicesAPI
   description: API documentation for Camunda workflow services
   context: /camundaservicesapi
@@ -43,7 +43,7 @@ data:
       policyName: AddCorrelationIDHeader
       policyVersion: v1
       policyType: api
-      policyId: 759316f5-a08e-4684-88bc-ccb6a614ca7c
+      policyId: 32a7e5b4-6b11-4a5d-b25e-a220d6a6ef03
       parameters: {}
     response: []
     fault: []
@@ -80,9 +80,9 @@ data:
     secret: ""
     signingAlgorithm: SHA1
     signatureHeader: x-hub-signature
-  createdTime: "1761408186225"
-  lastUpdatedTimestamp: "1761443817113"
-  lastUpdatedTime: 2025-10-26 04:56:57.113
+  createdTime: "1761483418926"
+  lastUpdatedTimestamp: "1762345719420"
+  lastUpdatedTime: 2025-11-05 12:28:39.42
   endpointConfig:
     endpoint_type: http
     sandbox_endpoints:
@@ -98,7 +98,8 @@ data:
       name: camunda:access
       displayName: camunda:access
       description: access scope for camunda APIs
-      bindings: []
+      bindings:
+       - camunda-user
     shared: true
   operations:
    -
@@ -144,6 +145,19 @@ data:
     id: ""
     target: "/api/v1/definitions/processes/{processKey}/tasks/{taskKey}"
     verb: PUT
+    authType: Application & Application User
+    throttlingPolicy: Unlimited
+    scopes:
+     - camunda:access
+    usedProductIds: []
+    operationPolicies:
+      request: []
+      response: []
+      fault: []
+   -
+    id: ""
+    target: "/api/v1/tasks/{taskId}/complete"
+    verb: GET
     authType: Application & Application User
     throttlingPolicy: Unlimited
     scopes:

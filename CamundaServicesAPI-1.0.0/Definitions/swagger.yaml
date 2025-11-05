@@ -8,7 +8,7 @@ info:
   version: 1.0.0
 servers:
  -
-  url: https://devcamunda-upsource.apps.qeema.io
+  url: https://gw.apps.qeema.io
   description: Generated server url
 security:
  -
@@ -306,6 +306,75 @@ paths:
          - oauth2
         optional: false
   /api/v1/tasks/{taskId}/complete:
+    get:
+      tags:
+       - Tasks
+      summary: Complete a task from email
+      operationId: completeTaskFromEmail
+      parameters:
+       -
+        name: X-Correlation-ID
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+       -
+        name: taskId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 33abada9-b28c-11f0-956f-4288b2052831
+       -
+        name: responseKey
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+       -
+        name: responseValue
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Operation completed successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiResponseVoid"
+              examples:
+                BackendSuccess:
+                  $ref: "#/components/examples/ApiResponseVoid"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+       -
+        default:
+         - camunda:access
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        security-types:
+         - oauth2
+        optional: false
     post:
       tags:
        - Tasks
@@ -397,6 +466,15 @@ paths:
         schema:
           type: string
         example: announcementProcess
+       -
+        name: isFinished
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+        example: true
       responses:
         "200":
           description: Operation completed successfully
@@ -514,15 +592,6 @@ paths:
         schema:
           type: string
        -
-        name: processDefinitionKey
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-        example: announcementProcess
-       -
         name: processInstanceId
         in: query
         required: false
@@ -531,7 +600,7 @@ paths:
         schema:
           type: string
        -
-        name: assignee
+        name: taskId
         in: query
         required: false
         style: form
@@ -539,94 +608,20 @@ paths:
         schema:
           type: string
        -
-        name: dueDate
+        name: taskState
         in: query
         required: false
         style: form
         explode: true
         schema:
           type: string
-       -
-        name: dueAfter
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-       -
-        name: dueBefore
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-       -
-        name: createdOn
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-       -
-        name: createdAfter
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-       -
-        name: createdBefore
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-       -
-        name: sortBy
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-       -
-        name: sortOrder
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-       -
-        name: firstResult
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
-          format: int32
-       -
-        name: maxResults
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
-          format: int32
       responses:
         "200":
           description: Operation completed successfully
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/ApiResponseListTaskDto"
+                $ref: "#/components/schemas/ApiResponseListHistoricTaskDto"
               examples:
                 BackendSuccess:
                   $ref: "#/components/examples/GetTasksSuccess"
@@ -674,6 +669,14 @@ paths:
         schema:
           type: string
         example: 6e983370-ae45-11f0-b428-1688b2a2c28a
+       -
+        name: activityType
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
         "200":
           description: Operation completed successfully
@@ -845,31 +848,19 @@ components:
         due:
           type: string
         followUp:
-          type:
-           - string
-           - "null"
+          type: string
         lastUpdated:
-          type:
-           - string
-           - "null"
+          type: string
         delegationState:
-          type:
-           - string
-           - "null"
+          type: string
         description:
-          type:
-           - string
-           - "null"
+          type: string
         executionId:
           type: string
         owner:
-          type:
-           - string
-           - "null"
+          type: string
         parentTaskId:
-          type:
-           - string
-           - "null"
+          type: string
         priority:
           type: integer
           format: int32
@@ -880,33 +871,46 @@ components:
         taskDefinitionKey:
           type: string
         caseExecutionId:
-          type:
-           - string
-           - "null"
+          type: string
         caseInstanceId:
-          type:
-           - string
-           - "null"
+          type: string
         caseDefinitionId:
-          type:
-           - string
-           - "null"
+          type: string
         suspended:
           type: boolean
         formKey:
-          type:
-           - string
-           - "null"
+          type: string
+        taskState:
+          type: string
         camundaFormRef:
-          anyOf:
-           -
-            type: "null"
-           -
-            $ref: "#/components/schemas/CamundaFormRef"
+          $ref: "#/components/schemas/CamundaFormRef"
         tenantId:
-          type:
-           - string
-           - "null"
+          type: string
+    HistoricTaskDto:
+      type: object
+      properties:
+        id:
+          type: string
+        processDefinitionKey:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        assignee:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+          format: int64
+        due:
+          type: string
+          format: date-time
         taskState:
           type: string
     ApiResponseVoid:
@@ -968,11 +972,7 @@ components:
         header:
           $ref: "#/components/schemas/Header"
         data:
-          anyOf:
-           -
-            type: "null"
-           -
-            $ref: "#/components/schemas/TaskDefinitionDto"
+          $ref: "#/components/schemas/TaskDefinitionDto"
     CompleteTaskRequestDto:
       type: object
       properties:
@@ -1032,17 +1032,13 @@ components:
         businessKey:
           type: string
         caseInstanceId:
-          type:
-           - string
-           - "null"
+          type: string
         ended:
           type: boolean
         suspended:
           type: boolean
         tenantId:
-          type:
-           - string
-           - "null"
+          type: string
         definitionKey:
           type: string
     ApiResponseListTaskDto:
@@ -1054,6 +1050,15 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/TaskDto"
+    ApiResponseListHistoricTaskDto:
+      type: object
+      properties:
+        header:
+          $ref: "#/components/schemas/Header"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/HistoricTaskDto"
     ApiResponseListHistoricProcessInstanceDto:
       type: object
       properties:
@@ -1069,17 +1074,13 @@ components:
         id:
           type: string
         businessKey:
-          type:
-           - string
-           - "null"
+          type: string
         processDefinitionId:
           type: string
         processDefinitionKey:
           type: string
         processDefinitionName:
-          type:
-           - string
-           - "null"
+          type: string
         processDefinitionVersion:
           type: integer
           format: int32
@@ -1087,54 +1088,34 @@ components:
           type: string
           format: date-time
         endTime:
-          type:
-           - string
-           - "null"
+          type: string
           format: date-time
         removalTime:
-          type:
-           - string
-           - "null"
+          type: string
           format: date-time
         durationInMillis:
-          type:
-           - string
-           - "null"
+          type: string
           format: int64
         startUserId:
-          type:
-           - string
-           - "null"
+          type: string
         startActivityId:
           type: string
         deleteReason:
-          type:
-           - string
-           - "null"
+          type: string
         rootProcessInstanceId:
           type: string
         superProcessInstanceId:
-          type:
-           - string
-           - "null"
+          type: string
         superCaseInstanceId:
-          type:
-           - string
-           - "null"
+          type: string
         caseInstanceId:
-          type:
-           - string
-           - "null"
+          type: string
         tenantId:
-          type:
-           - string
-           - "null"
+          type: string
         state:
           type: string
         restartedProcessInstanceId:
-          type:
-           - string
-           - "null"
+          type: string
     ApiResponseProcessInstanceDetailsDto:
       type: object
       properties:
@@ -1145,40 +1126,12 @@ components:
     HistoricActivityInstanceDto:
       type: object
       properties:
-        id:
-          type: string
-        parentActivityInstanceId:
-          type: string
-        activityId:
-          type: string
         activityName:
           type: string
         activityType:
           type: string
-        processDefinitionKey:
-          type: string
-        processDefinitionId:
-          type: string
-        processInstanceId:
-          type: string
-        executionId:
-          type: string
-        taskId:
-          type:
-           - string
-           - "null"
-        calledProcessInstanceId:
-          type:
-           - string
-           - "null"
-        calledCaseInstanceId:
-          type:
-           - string
-           - "null"
         assignee:
-          type:
-           - string
-           - "null"
+          type: string
         startTime:
           type: string
           format: date-time
@@ -1188,21 +1141,6 @@ components:
         durationInMillis:
           type: integer
           format: int64
-        canceled:
-          type: boolean
-        completeScope:
-          type: boolean
-        tenantId:
-          type:
-           - string
-           - "null"
-        removalTime:
-          type:
-           - string
-           - "null"
-          format: date-time
-        rootProcessInstanceId:
-          type: string
     ProcessInstanceDetailsDto:
       type: object
       properties:
@@ -1410,7 +1348,7 @@ components:
           status: FAILURE
           code: "404"
           message: Task definition with key 'lskdjflksjdklfdsk' in process 'announcementProcess' not found
-        data: null
+        data: {}
     CompleteTaskInternalServerError:
       value:
         header:
@@ -1431,104 +1369,80 @@ components:
         data:
          -
           id: 1546e146-b00f-11f0-b428-1688b2a2c28a
-          businessKey: null
           processDefinitionId: announcementProcess:7:1327f8d6-b00f-11f0-b428-1688b2a2c28a
           processDefinitionKey: announcementProcess
-          processDefinitionName: null
           processDefinitionVersion: 7
           startTime: 2025-10-23T12:52:07.645Z
-          endTime: null
-          removalTime: null
-          durationInMillis: null
-          startUserId: null
           startActivityId: Event_FormSubmitted
-          deleteReason: null
           rootProcessInstanceId: 1546e146-b00f-11f0-b428-1688b2a2c28a
-          superProcessInstanceId: null
-          superCaseInstanceId: null
-          caseInstanceId: null
-          tenantId: null
           state: ACTIVE
-          restartedProcessInstanceId: null
          -
           id: 82b18398-b027-11f0-94aa-f20fb8ac22b1
           businessKey: req-1
           processDefinitionId: announcementProcess:8:a8f91dee-b017-11f0-94aa-f20fb8ac22b1
           processDefinitionKey: announcementProcess
-          processDefinitionName: null
           processDefinitionVersion: 8
           startTime: 2025-10-23T15:46:59.138Z
-          endTime: null
-          removalTime: null
-          durationInMillis: null
-          startUserId: null
           startActivityId: Event_FormSubmitted
-          deleteReason: null
           rootProcessInstanceId: 82b18398-b027-11f0-94aa-f20fb8ac22b1
-          superProcessInstanceId: null
-          superCaseInstanceId: null
-          caseInstanceId: null
-          tenantId: null
           state: ACTIVE
-          restartedProcessInstanceId: null
     GetHistoricDataSuccess:
       value:
         header:
           X-Correlation-ID: "1"
-          timestamp: 2025-10-23T15:57:34.926813600Z
+          timestamp: 2025-10-28T08:02:03.435370900Z
           status: SUCCESS
           code: "0000"
           message: Operation completed successfully
         data:
           historicActivityInstances:
            -
-            id: bd694aa5-b028-11f0-94aa-f20fb8ac22b1
-            parentActivityInstanceId: SubProcess_Initializing:bd692492-b028-11f0-94aa-f20fb8ac22b1
-            activityId: ServiceTask_SetTasksDefinitionVariables
-            activityName: Set tasks definition variables
+            activityName: Request submitted
+            activityType: startEvent
+            startTime: 2025-10-28T00:27:06.226Z
+            endTime: 2025-10-28T00:27:06.247Z
+            durationInMillis: 21
+           -
+            activityName: Initialization started
+            activityType: startEvent
+            startTime: 2025-10-28T00:27:06.247Z
+            endTime: 2025-10-28T00:27:06.247Z
+            durationInMillis: 0
+           -
+            activityName: Initialize process
+            activityType: subProcess
+            startTime: 2025-10-28T00:27:06.247Z
+            endTime: 2025-10-28T07:47:12.625Z
+            durationInMillis: 26406378
+           -
+            activityName: Set task variables
             activityType: serviceTask
-            processDefinitionKey: announcementProcess
-            processDefinitionId: announcementProcess:8:a8f91dee-b017-11f0-94aa-f20fb8ac22b1
-            processInstanceId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
-            executionId: bd694aa4-b028-11f0-94aa-f20fb8ac22b1
-            taskId: null
-            calledProcessInstanceId: null
-            calledCaseInstanceId: null
-            assignee: null
-            startTime: 2025-10-23T15:55:47.146Z
-            endTime: 2025-10-23T15:55:48.215Z
-            durationInMillis: 1069
-            canceled: false
-            completeScope: false
-            tenantId: null
-            removalTime: null
-            rootProcessInstanceId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
+            startTime: 2025-10-28T00:27:06.248Z
+            endTime: 2025-10-28T00:27:14.097Z
+            durationInMillis: 7849
+           -
+            activityName: Set employee variables
+            activityType: serviceTask
+            startTime: 2025-10-28T00:27:14.098Z
+            endTime: 2025-10-28T07:47:12.555Z
+            durationInMillis: 26398457
           processVariables:
            -
-            type: String
-            value: ahmeddeeb22222@gmail.com
-            valueInfo:
-              objectTypeName: null
-              serializationDataFormat: null
-            id: bd6812fd-b028-11f0-94aa-f20fb8ac22b1
             name: requesterEmail
-            processDefinitionKey: announcementProcess
-            processDefinitionId: announcementProcess:8:a8f91dee-b017-11f0-94aa-f20fb8ac22b1
-            processInstanceId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
-            executionId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
-            activityInstanceId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
-            caseDefinitionKey: null
-            caseDefinitionId: null
-            caseInstanceId: null
-            caseExecutionId: null
-            taskId: null
-            errorMessage: null
-            tenantId: null
-            state: CREATED
-            createTime: 2025-10-23T15:55:47.138Z
-            removalTime: null
-            rootProcessInstanceId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
+            type: String
+            value: ahmeddeeb22222+1@gmail.com
+            valueInfo: {}
            -
+            name: audience
+            type: Object
+            value:
+             - CSM Employees
+             - Corporate Employees
+            valueInfo:
+              objectTypeName: java.util.ArrayList
+              serializationDataFormat: application/json
+           -
+            name: attachments
             type: Object
             value:
              - announcement-banner.png
@@ -1536,24 +1450,93 @@ components:
             valueInfo:
               objectTypeName: java.util.ArrayList
               serializationDataFormat: application/json
-            id: bd686125-b028-11f0-94aa-f20fb8ac22b1
-            name: attachments
-            processDefinitionKey: announcementProcess
-            processDefinitionId: announcementProcess:8:a8f91dee-b017-11f0-94aa-f20fb8ac22b1
-            processInstanceId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
-            executionId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
-            activityInstanceId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
-            caseDefinitionKey: null
-            caseDefinitionId: null
-            caseInstanceId: null
-            caseExecutionId: null
-            taskId: null
-            errorMessage: null
-            tenantId: null
-            state: CREATED
-            createTime: 2025-10-23T15:55:47.14Z
-            removalTime: null
-            rootProcessInstanceId: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
+           -
+            name: channels
+            type: Object
+            value:
+             - Twasol
+             - Rahaba+
+            valueInfo:
+              objectTypeName: java.util.ArrayList
+              serializationDataFormat: application/json
+           -
+            name: proposedTimeline
+            type: String
+            value: 2025-11-01
+            valueInfo: {}
+           -
+            name: locations
+            type: Object
+            value:
+             - Alaqarya 3rd Floor
+             - Queen Noura University
+            valueInfo:
+              objectTypeName: java.util.ArrayList
+              serializationDataFormat: application/json
+           -
+            name: title
+            type: String
+            value: Q4 Internal Campaign
+            valueInfo: {}
+           -
+            name: type
+            type: Object
+            value:
+             - Internal
+             - Public
+            valueInfo:
+              objectTypeName: java.util.ArrayList
+              serializationDataFormat: application/json
+           -
+            name: descriptionBrief
+            type: String
+            value: Internal campaign announcement for Q4.
+            valueInfo: {}
+           -
+            name: status
+            type: String
+            value: Submitted
+            valueInfo: {}
+           -
+            name: requesterReviewSla
+            type: Integer
+            value: 2
+            valueInfo: {}
+           -
+            name: marketingManagerReviewSla
+            type: Integer
+            value: 30
+            valueInfo: {}
+           -
+            name: directorReviewSla
+            type: Integer
+            value: 3
+            valueInfo: {}
+           -
+            name: submitInfoSla
+            type: Integer
+            value: 3
+            valueInfo: {}
+           -
+            name: lineManagerReviewSla
+            type: Integer
+            value: 2
+            valueInfo: {}
+           -
+            name: setDueDateSla
+            type: Integer
+            value: 2
+            valueInfo: {}
+           -
+            name: marketingEmployeeReviewSla
+            type: Integer
+            value: 3
+            valueInfo: {}
+           -
+            name: assignMarketingEmployeeSla
+            type: Integer
+            value: 2
+            valueInfo: {}
     StartProcessInstanceSuccess:
       value:
         header:
@@ -1571,45 +1554,49 @@ components:
           id: bd67c4dc-b028-11f0-94aa-f20fb8ac22b1
           definitionId: announcementProcess:8:a8f91dee-b017-11f0-94aa-f20fb8ac22b1
           businessKey: req-1
-          caseInstanceId: null
           ended: false
           suspended: false
-          tenantId: null
           definitionKey: announcementProcess
     GetTasksSuccess:
       value:
         header:
           X-Correlation-ID: "1"
-          timestamp: 2025-10-23T16:11:20.351952Z
+          timestamp: 2025-11-04T12:44:58.742740900Z
           status: SUCCESS
           code: "0000"
           message: Operation completed successfully
         data:
          -
-          id: 275745fc-b018-11f0-94aa-f20fb8ac22b1
-          name: Review by Nawaf Abdulaziz Aldhubaib
-          assignee: ahmeddeeb22222@gmail.com
-          created: 2025-10-23T13:57:03.422Z
-          due: 2025-10-25T13:57:03.437Z
-          followUp: null
-          lastUpdated: null
-          delegationState: null
-          description: null
-          executionId: 2741e935-b018-11f0-94aa-f20fb8ac22b1
-          owner: null
-          parentTaskId: null
-          priority: 50
-          processDefinitionId: announcementProcess:8:a8f91dee-b017-11f0-94aa-f20fb8ac22b1
-          processInstanceId: ce57eb8e-b017-11f0-94aa-f20fb8ac22b1
-          taskDefinitionKey: UserTask_ReviewByLineManager
-          caseExecutionId: null
-          caseInstanceId: null
-          caseDefinitionId: null
-          suspended: false
-          formKey: null
-          camundaFormRef: null
-          tenantId: null
+          id: 198d4d71-b96d-11f0-8b00-daedbe57cb50
+          processDefinitionKey: announcementProcess
+          name: Marketing Manager Approval
+          description: A new announcement request requires your review and approval. Please check the details.
+          assignee: prog.aya92@gmail.com
+          startTime: 2025-11-04T10:57:47.976+0000
+          due: 2025-12-04T10:57:47.976+0000
           taskState: Created
+         -
+          id: f5f5d330-b96c-11f0-8b00-daedbe57cb50
+          processDefinitionKey: announcementProcess
+          name: Director Approval
+          description: A new announcement request requires your review and approval. Please check the details.
+          assignee: ahmeddeeb22222+3@gmail.com
+          startTime: 2025-11-04T10:56:48.263+0000
+          endTime: 2025-11-04T10:57:47.967+0000
+          duration: 59704
+          due: 2025-11-07T10:56:48.262+0000
+          taskState: Completed
+         -
+          id: e6587ab2-b96c-11f0-8b00-daedbe57cb50
+          processDefinitionKey: announcementProcess
+          name: Line Manager Approval
+          description: A new announcement request requires your review and approval. Please check the details.
+          assignee: ahmeddeeb22222+2@gmail.com
+          startTime: 2025-11-04T10:56:22.081+0000
+          endTime: 2025-11-04T10:56:48.235+0000
+          duration: 26154
+          due: 2025-11-06T10:56:22.078+0000
+          taskState: Completed
     GetProcessDefinitionSuccess:
       value:
         header:
@@ -1701,7 +1688,7 @@ components:
           scopes:
             camunda:access: access scope for camunda APIs
           x-scopes-bindings:
-            camunda:access: ""
+            camunda:access: camunda-user
         authorizationCode:
           authorizationUrl: https://wso2is.apps.qeema.io/oauth2/authorize
           tokenUrl: https://wso2is.apps.qeema.io/oauth2/token
