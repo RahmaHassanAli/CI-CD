@@ -3,8 +3,8 @@ info:
   title: CamundaServicesAPI
   description: API documentation for Camunda workflow services
   contact:
-    name: Rahma Hassan
-    email: rahma.hassan@qeema.net
+    name: IntegrationTeam
+    email: moaaz.taha@qeema.net
   version: 1.0.0
 servers:
  -
@@ -61,70 +61,6 @@ paths:
                   $ref: "#/components/examples/ApiResponseVoid"
                 BackendFailure:
                   $ref: "#/components/examples/TaskNotFoundError"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "429":
-          $ref: "#/components/responses/TooManyRequests"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "503":
-          $ref: "#/components/responses/ServiceUnavailable"
-      security:
-       -
-        default:
-         - camunda:access
-      x-auth-type: Application & Application User
-      x-throttling-tier: Unlimited
-      x-wso2-application-security:
-        security-types:
-         - oauth2
-        optional: false
-  /api/v1/process-instances/{processInstanceId}/suspended:
-    put:
-      tags:
-       - Process Instances
-      summary: Activate or suspend a running process instance
-      operationId: activateSuspendProcessInstance
-      parameters:
-       -
-        name: X-Correlation-ID
-        in: header
-        required: false
-        style: simple
-        explode: false
-        schema:
-          type: string
-       -
-        name: processInstanceId
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-        example: 6e983370-ae45-11f0-b428-1688b2a2c28a
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ActivateSuspendRequestDto"
-            example:
-              suspended: true
-        required: true
-      responses:
-        "200":
-          description: Operation completed successfully
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ApiResponseVoid"
-              examples:
-                BackendSuccess:
-                  $ref: "#/components/examples/ApiResponseVoid"
-                BackendFailure:
-                  $ref: "#/components/examples/MissingRequestBodyError"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -249,29 +185,6 @@ paths:
               $ref: "#/components/schemas/TaskDefinitionDto"
             example:
               slaDays: 3
-              inputs:
-               -
-                label: Approve/Reject Request
-                description: Decision on the request
-                type: Radio button
-                options:
-                 - Approve
-                 - Reject
-               -
-                label: Comment
-                description: Additional remarks or feedback
-                type: Multi-line text
-                options:
-                 - Free text
-               -
-                label: Attachments
-                description: Supporting files
-                type: File upload
-                options:
-                 - PDF
-                 - JPG
-                 - PNG
-                 - DOCX
         required: true
       responses:
         "200":
@@ -460,12 +373,20 @@ paths:
        -
         name: processDefinitionKey
         in: query
-        required: true
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: string
+        example: announcementProcess
+       -
+        name: processInstanceId
+        in: query
+        required: false
         style: form
         explode: true
         schema:
           type: string
-        example: announcementProcess
        -
         name: isFinished
         in: query
@@ -532,19 +453,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/StartProcessInstanceRequestDto"
+              $ref: "#/components/schemas/StartProcessInstanceRequest"
             example:
               businessKey: req-1
               variables:
                 requesterEmail:
                   value: ahmeddeeb22222@gmail.com
                   type: String
-                type:
-                  value: "[\"Internal\", \"Public\"]"
-                  type: Object
-                  valueInfo:
-                    objectTypeName: java.util.ArrayList
-                    serializationDataFormat: application/json
         required: true
       responses:
         "200":
@@ -843,53 +758,16 @@ components:
           type: string
         assignee:
           type: string
-        created:
-          type: string
         due:
           type: string
-        followUp:
-          type: string
-        lastUpdated:
-          type: string
-        delegationState:
-          type: string
         description:
-          type: string
-        executionId:
-          type: string
-        owner:
-          type: string
-        parentTaskId:
-          type: string
-        priority:
-          type: integer
-          format: int32
-        processDefinitionId:
-          type: string
-        processInstanceId:
-          type: string
-        taskDefinitionKey:
-          type: string
-        caseExecutionId:
-          type: string
-        caseInstanceId:
-          type: string
-        caseDefinitionId:
-          type: string
-        suspended:
-          type: boolean
-        formKey:
-          type: string
-        taskState:
-          type: string
-        camundaFormRef:
-          $ref: "#/components/schemas/CamundaFormRef"
-        tenantId:
           type: string
     HistoricTaskDto:
       type: object
       properties:
         id:
+          type: string
+        processInstanceId:
           type: string
         processDefinitionKey:
           type: string
@@ -948,9 +826,7 @@ components:
         type:
           type: string
         options:
-          type: array
-          items:
-            type: string
+          type: string
       required:
        - description
        - label
@@ -959,6 +835,10 @@ components:
     TaskDefinitionDto:
       type: object
       properties:
+        assignees:
+          type: string
+        assigneesKey:
+          type: string
         slaDays:
           type: integer
           format: int32
@@ -1177,6 +1057,15 @@ components:
       properties:
         deleteReason:
           type: string
+    StartProcessInstanceRequest:
+      type: object
+      properties:
+        variables:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ProcessVariableDto"
+        businessKey:
+          type: string
     Error:
       type: object
       properties:
@@ -1322,24 +1211,17 @@ components:
             label: Approve/Reject Request
             description: Decision on the request
             type: Radio button
-            options:
-             - Reject
-             - Approve
+            options: "Approve,Reject"
            -
             label: Comment
             description: Additional remarks or feedback
             type: Multi-line text
-            options:
-             - Free text
+            options: Free text
            -
             label: Attachments
             description: Supporting files
             type: File upload
-            options:
-             - DOCX
-             - JPG
-             - PDF
-             - PNG
+            options: "PDF,JPG,PNG,DOCX"
     TaskDefinitionNotFoundError:
       value:
         header:
@@ -1608,77 +1490,57 @@ components:
         data:
           key: announcementProcess
           tasks:
-           - UserTask_EditRequest
-           - UserTask_PrepareDraft
-           - UserTask_ReviewByDirector
            - UserTask_ReviewByLineManager
+           - UserTask_EditRequest
+           - UserTask_ReviewByDirector
            - UserTask_ReviewByMarketingManager
-           - UserTask_ReviewByRequester
            - UserTask_SetDueDate
            - UserTask_SubmitInfo
+           - UserTask_PrepareDraft
+           - UserTask_ReviewByRequester
+           - UserTask_ReviewByMarketingEmployee
+           - UserTask_AssignMarketingEmployee
           inputs:
-           -
-            label: Type
-            description: Type of announcement
-            type: Checkbox list
-            options:
-             - Internal
-             - Public
-           -
-            label: Audience
-            description: Target audience
-            type: Checkbox list
-            options:
-             - Corporate Employees
-             - CSM Employees
-             - All Employees
-           -
-            label: Location(s)
-            description: Announcement locations
-            type: Multi-select drop-down
-            options:
-             - Queen Noura University
-             - Qassim
-             - Medina
-             - Alaqarya 3th floor
-           -
-            label: Channels
-            description: Publication channels
-            type: Checkbox list
-            options:
-             - LinkedIn
-             - Rahaba
-             - Twasol
-             - Rahaba+
-             - Twitter
-             - Snapchat
-           -
-            label: Description / Brief
-            description: Announcement summary
-            type: Multi-line text
-            options:
-             - Free text
-           -
-            label: Attachments
-            description: Supporting files
-            type: File upload
-            options:
-             - JPG
-             - DOCX
-             - PDF
-             - PNG
-           -
-            label: Proposed Timeline
-            description: Suggested publishing date
-            type: Date picker
-            options:
-             - Calendar field
            -
             label: Title
             description: Announcement request title
             type: Text
-            options:
-             - Free text
+            options: Free text
+           -
+            label: Type
+            description: Type of announcement
+            type: Checkbox list
+            options: "Internal,Public"
+           -
+            label: Audience
+            description: Target audience
+            type: Checkbox list
+            options: "All Employees,CSM Employees,Corporate Employees"
+           -
+            label: Location(s)
+            description: Announcement locations
+            type: Multi-select drop-down
+            options: "Alaqarya 3th floor,Queen Noura University,Medina,Qassim"
+           -
+            label: Channels
+            description: Publication channels
+            type: Checkbox list
+            options: "Twasol,Rahaba,Rahaba+,Snapchat,LinkedIn,Twitter"
+           -
+            label: Description / Brief
+            description: Announcement summary
+            type: Multi-line text
+            options: Free text
+           -
+            label: Attachments
+            description: Supporting files
+            type: File upload
+            options: "PDF,JPG,PNG,DOCX"
+           -
+            label: Proposed Timeline
+            description: Suggested publishing date
+            type: Date picker
+            options: Calendar field
   securitySchemes:
     default:
       type: oauth2
@@ -1688,7 +1550,7 @@ components:
           scopes:
             camunda:access: access scope for camunda APIs
           x-scopes-bindings:
-            camunda:access: camunda-user
+            camunda:access: ""
         authorizationCode:
           authorizationUrl: https://wso2is.apps.qeema.io/oauth2/authorize
           tokenUrl: https://wso2is.apps.qeema.io/oauth2/token

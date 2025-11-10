@@ -1,7 +1,7 @@
 type: api
 version: v4.5.0
 data:
-  id: 3d4e6308-dd8a-4781-acf0-054c526a7be8
+  id: 4add79ac-0687-4231-b03b-8af5b54fd37d
   name: CamundaServicesAPI
   description: API documentation for Camunda workflow services
   context: /camundaservicesapi
@@ -43,7 +43,7 @@ data:
       policyName: AddCorrelationIDHeader
       policyVersion: v1
       policyType: api
-      policyId: 32a7e5b4-6b11-4a5d-b25e-a220d6a6ef03
+      policyId: 759316f5-a08e-4684-88bc-ccb6a614ca7c
       parameters: {}
     response: []
     fault: []
@@ -80,9 +80,9 @@ data:
     secret: ""
     signingAlgorithm: SHA1
     signatureHeader: x-hub-signature
-  createdTime: "1761483418926"
-  lastUpdatedTimestamp: "1762345719420"
-  lastUpdatedTime: 2025-11-05 12:28:39.42
+  createdTime: "1762347699363"
+  lastUpdatedTimestamp: "1762767571936"
+  lastUpdatedTime: 2025-11-10 11:39:31.936
   endpointConfig:
     endpoint_type: http
     sandbox_endpoints:
@@ -98,26 +98,12 @@ data:
       name: camunda:access
       displayName: camunda:access
       description: access scope for camunda APIs
-      bindings:
-       - camunda-user
+      bindings: []
     shared: true
   operations:
    -
     id: ""
     target: "/api/v1/tasks/{taskId}"
-    verb: PUT
-    authType: Application & Application User
-    throttlingPolicy: Unlimited
-    scopes:
-     - camunda:access
-    usedProductIds: []
-    operationPolicies:
-      request: []
-      response: []
-      fault: []
-   -
-    id: ""
-    target: "/api/v1/process-instances/{processInstanceId}/suspended"
     verb: PUT
     authType: Application & Application User
     throttlingPolicy: Unlimited
