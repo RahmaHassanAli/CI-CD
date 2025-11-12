@@ -1550,7 +1550,7 @@ components:
           scopes:
             camunda:access: access scope for camunda APIs
           x-scopes-bindings:
-            camunda:access: ""
+            camunda:access: camunda-user
         authorizationCode:
           authorizationUrl: https://wso2is.apps.qeema.io/oauth2/authorize
           tokenUrl: https://wso2is.apps.qeema.io/oauth2/token
